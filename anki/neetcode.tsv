@@ -1,0 +1,15 @@
+#separator:tab
+#html:true
+#deck:NeetCode
+#guid column:1
+#tags column:4
+pattern-dp-2d-recipe	「兩個字串/序列 + 前綴」型 2D DP 的三個步驟?	A. 狀態:dp[i][j] = A 前 i 個、B 前 j 個時的答案(寫成一句完整的話)<br>B. 轉移:只看最後一個元素 A[i-1]、B[j-1],列出所有選擇,各退回哪一格<br>C. 邊界:開 (n+1)×(m+1),第 0 列/行 = 空前綴;dp 索引是長度、字串索引是位置,所以用 A[i-1]	pattern neetcode::dp-2d
+habit-before-submit	按 Submit 之前要做哪三件事?	1. 手動跑一個小例子<br>2. 跑一個邊界例子(空、單一元素、全部相同)<br>3. 刪掉 debug 輸出(printf)	habit
+nc-longest-common-subsequence-recognize	兩個字串,求「兩邊都有、順序一致、不必連續」的最長子序列長度。方法與 dp[i][j] 定義?	2D DP。dp[i][j] = text1 前 i 個字元與 text2 前 j 個字元的 LCS 長度。答案 dp[n][m],時間 O(nm)	neetcode::dp-2d
+nc-longest-common-subsequence-transition	LCS 的轉移式?最後字元不相等時,為什麼是 max(dp[i-1][j], dp[i][j-1])?	相等:dp[i-1][j-1] + 1;不等:max(dp[i-1][j], dp[i][j-1])<br>不等時 a、b 至少一個沒被用到:若 a 被用到,它是子序列最後一個字元,配到 B 中 b 之前的位置,b 就用不到<br>不知道是哪一個沒用到,所以兩個都試,取 max	neetcode::dp-2d
+nc-edit-distance-transition	Edit Distance(插入/刪除/替換,求最少操作):dp 定義、邊界、轉移?	dp[i][j] = word1 前 i 個轉成 word2 前 j 個的最少操作<br>邊界:dp[i][0] = i(全刪)、dp[0][j] = j(全插)<br>相等:dp[i-1][j-1];不等:1 + min(dp[i-1][j-1] 替換, dp[i-1][j] 刪除, dp[i][j-1] 插入)	neetcode::dp-2d
+nc-longest-increasing-subsequence-dp	LIS(最長嚴格遞增子序列)的 O(n²) DP:dp[i] 的定義、轉移、答案在哪?	dp[i] = 以 nums[i] 結尾的 LIS 長度,初始為 1<br>dp[i] = max(dp[j] + 1),其中 j &lt; i 且 nums[j] &lt; nums[i]<br>答案是所有 dp[i] 的最大值,不是 dp[n-1]	neetcode::dp-1d
+nc-counting-bits-transition	求 0..n 每個數的二進位 1 個數,如何 O(n)?	dp[i] = dp[i &gt;&gt; 1] + (i &amp; 1)<br>i &gt;&gt; 1 是 i 去掉最低位,一定比 i 小、已經算過;再加回最低位是不是 1	neetcode::bit neetcode::dp-1d
+nc-lca-bst-iterative	在 BST 中找 p、q 的最低共同祖先,如何做到 O(h) 時間、O(1) 空間?	從 root 往下走:p、q 都比 cur 小就往左;都比 cur 大就往右;否則 cur 就是答案(兩者分岔,或 cur 等於其中一個)<br>靠 BST 的有序性,不需要遞迴或額外空間	neetcode::tree
+nc-anagram-groups-key	把互為字母重排(anagram)的字串分組:hash map 的 key 用什麼?兩種做法的複雜度?	1. 排序後的字串:O(n·k log k)<br>2. 26 個字母的計數串成字串,例如 1#0#2#...:O(n·k)<br>分隔符 # 不能省,否則計數 [1, 11] 和 [11, 1] 都會變成 111	neetcode::hashing
+cpp-range-for-copy	C++:<code>for (const string s : strs)</code> 有什麼問題?	每一圈都複製一份字串。改成 <code>const string&amp; s</code>,唯讀時用 const 參考	cpp
