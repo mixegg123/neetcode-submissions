@@ -13,3 +13,12 @@ nc-counting-bits-transition	求 0..n 每個數的二進位 1 個數,如何 O(n)?
 nc-lca-bst-iterative	在 BST 中找 p、q 的最低共同祖先,如何做到 O(h) 時間、O(1) 空間?	從 root 往下走:p、q 都比 cur 小就往左;都比 cur 大就往右;否則 cur 就是答案(兩者分岔,或 cur 等於其中一個)<br>靠 BST 的有序性,不需要遞迴或額外空間	neetcode::tree
 nc-anagram-groups-key	把互為字母重排(anagram)的字串分組:hash map 的 key 用什麼?兩種做法的複雜度?	1. 排序後的字串:O(n·k log k)<br>2. 26 個字母的計數串成字串,例如 1#0#2#...:O(n·k)<br>分隔符 # 不能省,否則計數 [1, 11] 和 [11, 1] 都會變成 111	neetcode::hashing
 cpp-range-for-copy	C++:<code>for (const string s : strs)</code> 有什麼問題?	每一圈都複製一份字串。改成 <code>const string&amp; s</code>,唯讀時用 const 參考	cpp
+nc-pacific-atlantic-water-flow-recognize	高度格子,水只能流向不高於自己的鄰格。求能同時流到「上/左邊界」和「下/右邊界」的格子。從每格出發模擬太慢,怎麼做?	反向思考:從兩組邊界各自出發,往高度 ≥ 目前格的鄰格 DFS/BFS,得到兩個可達集合,取交集<br>每格對每個海洋最多走一次,O(mn)	neetcode::graph
+nc-binary-tree-right-side-view-bfs	從右邊看一棵二元樹,輸出每一層看得到的節點。用 BFS 怎麼取?	層序 BFS:每層開始時記下 size = q.size(),該層最後一個節點就是答案<br>可以在處理前取 q.back(),或在迴圈中 i == size - 1 時取	neetcode::tree
+nc-islands-and-treasure-multisource-bfs	格子裡有多個寶藏(0)、牆(-1)、空地(INF),要把每塊空地填成「到最近寶藏的距離」。用什麼方法?	多源 BFS:所有寶藏一起放進佇列,一圈一圈往外擴散<br>第一次走到某格時的距離就是最短距離,之後不再更新;每格只處理一次,O(mn)	neetcode::graph
+nc-islands-and-treasure-dfs-tle	「到最近寶藏的距離」這題,為什麼從每個寶藏各自 DFS 會超時?	每個寶藏都會把同一塊空地重新走一次、覆蓋更短的距離,最差 O(k·mn)(k 是寶藏數)<br>無權重格子的最短距離用 BFS,多個起點就全部一起入佇列。你的 DFS 版本就是因此 TLE	neetcode::graph
+nc-climbing-stairs-recurrence	每次爬 1 或 2 階,爬到第 n 階有幾種方法?遞迴式和初始值?	dp[i] = dp[i-1] + dp[i-2](最後一步是 1 階或 2 階)<br>dp[0] = dp[1] = 1,本質就是 Fibonacci	neetcode::dp-1d
+nc-rotate-matrix-steps	n×n 矩陣原地順時針旋轉 90°,哪兩個步驟?	1. 轉置:沿主對角線交換 matrix[r][c] 和 matrix[c][r]<br>2. 每一列左右反轉	neetcode::math
+nc-rotate-matrix-transpose-range	原地轉置矩陣時,內層迴圈 c 要從哪裡開始?為什麼?	c 從 r + 1 開始,只處理上三角<br>若從 0 開始,每一對 (r, c) 會被交換兩次,等於沒換	neetcode::math
+nc-valid-binary-search-tree-bounds	驗證 BST 時,只比較每個節點和它的左右子節點為什麼不夠?正確做法?	BST 要求整棵左子樹都小於節點,不只直接子節點。反例:5 的右子是 6,6 的左子是 4,局部都對,但 4 &lt; 5 卻在右子樹<br>往下傳 (下界, 上界):往左走上界改成 node-&gt;val,往右走下界改成 node-&gt;val,每個節點必須嚴格落在區間內	neetcode::tree
+nc-valid-binary-search-tree-int-bounds	驗證 BST 時用 INT_MIN / INT_MAX 當初始上下界,會有什麼 bug?怎麼修?	節點值本身可能就是 INT_MIN 或 INT_MAX,嚴格比較會誤判,例如只有一個值為 INT_MAX 的節點會被判成不合法<br>改用 long long(LLONG_MIN / LLONG_MAX),或傳 TreeNode* 當邊界、nullptr 代表沒有限制	neetcode::tree
