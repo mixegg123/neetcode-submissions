@@ -3,31 +3,31 @@
 #deck:NeetCode
 #guid column:1
 #tags column:4
-pattern-dp-2d-recipe	「兩個字串/序列 + 前綴」型 2D DP 的三個步驟?	A. 狀態:dp[i][j] = A 前 i 個、B 前 j 個時的答案(寫成一句完整的話)<br>B. 轉移:只看最後一個元素 A[i-1]、B[j-1],列出所有選擇,各退回哪一格<br>C. 邊界:開 (n+1)×(m+1),第 0 列/行 = 空前綴;dp 索引是長度、字串索引是位置,所以用 A[i-1]	pattern neetcode::dp-2d
-habit-before-submit	按 Submit 之前要做哪三件事?	1. 手動跑一個小例子<br>2. 跑一個邊界例子(空、單一元素、全部相同)<br>3. 刪掉 debug 輸出(printf)	habit
-nc-longest-common-subsequence-recognize	兩個字串,求「兩邊都有、順序一致、不必連續」的最長子序列長度。方法與 dp[i][j] 定義?	2D DP。dp[i][j] = text1 前 i 個字元與 text2 前 j 個字元的 LCS 長度。答案 dp[n][m],時間 O(nm)	neetcode::dp-2d
-nc-longest-common-subsequence-transition	LCS 的轉移式?最後字元不相等時,為什麼是 max(dp[i-1][j], dp[i][j-1])?	相等:dp[i-1][j-1] + 1;不等:max(dp[i-1][j], dp[i][j-1])<br>不等時 a、b 至少一個沒被用到:若 a 被用到,它是子序列最後一個字元,配到 B 中 b 之前的位置,b 就用不到<br>不知道是哪一個沒用到,所以兩個都試,取 max	neetcode::dp-2d
-nc-edit-distance-transition	Edit Distance(插入/刪除/替換,求最少操作):dp 定義、邊界、轉移?	dp[i][j] = word1 前 i 個轉成 word2 前 j 個的最少操作<br>邊界:dp[i][0] = i(全刪)、dp[0][j] = j(全插)<br>相等:dp[i-1][j-1];不等:1 + min(dp[i-1][j-1] 替換, dp[i-1][j] 刪除, dp[i][j-1] 插入)	neetcode::dp-2d
-nc-longest-increasing-subsequence-dp	LIS(最長嚴格遞增子序列)的 O(n²) DP:dp[i] 的定義、轉移、答案在哪?	dp[i] = 以 nums[i] 結尾的 LIS 長度,初始為 1<br>dp[i] = max(dp[j] + 1),其中 j &lt; i 且 nums[j] &lt; nums[i]<br>答案是所有 dp[i] 的最大值,不是 dp[n-1]	neetcode::dp-1d
-nc-counting-bits-transition	求 0..n 每個數的二進位 1 個數,如何 O(n)?	dp[i] = dp[i &gt;&gt; 1] + (i &amp; 1)<br>i &gt;&gt; 1 是 i 去掉最低位,一定比 i 小、已經算過;再加回最低位是不是 1	neetcode::bit neetcode::dp-1d
-nc-lca-bst-iterative	在 BST 中找 p、q 的最低共同祖先,如何做到 O(h) 時間、O(1) 空間?	從 root 往下走:p、q 都比 cur 小就往左;都比 cur 大就往右;否則 cur 就是答案(兩者分岔,或 cur 等於其中一個)<br>靠 BST 的有序性,不需要遞迴或額外空間	neetcode::tree
-nc-anagram-groups-key	把互為字母重排(anagram)的字串分組:hash map 的 key 用什麼?兩種做法的複雜度?	1. 排序後的字串:O(n·k log k)<br>2. 26 個字母的計數串成字串,例如 1#0#2#...:O(n·k)<br>分隔符 # 不能省,否則計數 [1, 11] 和 [11, 1] 都會變成 111	neetcode::hashing
-cpp-range-for-copy	C++:<code>for (const string s : strs)</code> 有什麼問題?	每一圈都複製一份字串。改成 <code>const string&amp; s</code>,唯讀時用 const 參考	cpp
-nc-pacific-atlantic-water-flow-recognize	高度格子,水只能流向不高於自己的鄰格。求能同時流到「上/左邊界」和「下/右邊界」的格子。從每格出發模擬太慢,怎麼做?	反向思考:從兩組邊界各自出發,往高度 ≥ 目前格的鄰格 DFS/BFS,得到兩個可達集合,取交集<br>每格對每個海洋最多走一次,O(mn)	neetcode::graph
-nc-binary-tree-right-side-view-bfs	從右邊看一棵二元樹,輸出每一層看得到的節點。用 BFS 怎麼取?	層序 BFS:每層開始時記下 size = q.size(),該層最後一個節點就是答案<br>可以在處理前取 q.back(),或在迴圈中 i == size - 1 時取	neetcode::tree
-nc-islands-and-treasure-multisource-bfs	格子裡有多個寶藏(0)、牆(-1)、空地(INF),要把每塊空地填成「到最近寶藏的距離」。用什麼方法?	多源 BFS:所有寶藏一起放進佇列,一圈一圈往外擴散<br>第一次走到某格時的距離就是最短距離,之後不再更新;每格只處理一次,O(mn)	neetcode::graph
-nc-islands-and-treasure-dfs-tle	「到最近寶藏的距離」這題,為什麼從每個寶藏各自 DFS 會超時?	每個寶藏都會把同一塊空地重新走一次、覆蓋更短的距離,最差 O(k·mn)(k 是寶藏數)<br>無權重格子的最短距離用 BFS,多個起點就全部一起入佇列。你的 DFS 版本就是因此 TLE	neetcode::graph
-nc-climbing-stairs-recurrence	每次爬 1 或 2 階,爬到第 n 階有幾種方法?遞迴式和初始值?	dp[i] = dp[i-1] + dp[i-2](最後一步是 1 階或 2 階)<br>dp[0] = dp[1] = 1,本質就是 Fibonacci	neetcode::dp-1d
-nc-rotate-matrix-steps	n×n 矩陣原地順時針旋轉 90°,哪兩個步驟?	1. 轉置:沿主對角線交換 matrix[r][c] 和 matrix[c][r]<br>2. 每一列左右反轉	neetcode::math
-nc-rotate-matrix-transpose-range	原地轉置矩陣時,內層迴圈 c 要從哪裡開始?為什麼?	c 從 r + 1 開始,只處理上三角<br>若從 0 開始,每一對 (r, c) 會被交換兩次,等於沒換	neetcode::math
-nc-valid-binary-search-tree-bounds	驗證 BST 時,只比較每個節點和它的左右子節點為什麼不夠?正確做法?	BST 要求整棵左子樹都小於節點,不只直接子節點。反例:5 的右子是 6,6 的左子是 4,局部都對,但 4 &lt; 5 卻在右子樹<br>往下傳 (下界, 上界):往左走上界改成 node-&gt;val,往右走下界改成 node-&gt;val,每個節點必須嚴格落在區間內	neetcode::tree
-nc-valid-binary-search-tree-int-bounds	驗證 BST 時用 INT_MIN / INT_MAX 當初始上下界,會有什麼 bug?怎麼修?	節點值本身可能就是 INT_MIN 或 INT_MAX,嚴格比較會誤判,例如只有一個值為 INT_MAX 的節點會被判成不合法<br>改用 long long(LLONG_MIN / LLONG_MAX),或傳 TreeNode* 當邊界、nullptr 代表沒有限制	neetcode::tree
-nc-max-water-container-two-pointers	一排柱子高度,任選兩根和 x 軸圍成容器,求最大水量。O(n) 怎麼做?每次移動哪一邊、為什麼?	左右指針從兩端開始,面積 = min(h[l], h[r]) × (r - l)<br>移動較矮的一邊:高度由矮邊決定,寬度只會越來越小,留著矮邊不可能得到更大的面積	neetcode::two-pointers
-nc-maximum-product-subarray-minmax	求乘積最大的連續子陣列。為什麼要同時維護「以當前元素結尾的最大乘積和最小乘積」?	負數會讓最小(最負)的乘積翻成最大<br>每一步的候選是 num、maxP × num、minP × num,新的 maxP、minP 從這三個取;候選含 num 本身,遇到 0 會自動重新開始<br>答案是過程中 maxP 的最大值	neetcode::dp-1d
-nc-maximum-product-subarray-is-dp	「連續子陣列的最大和/最大乘積」這類題是 DP 嗎?為什麼不用滑動視窗?	是 1D DP(Kadane):狀態是「以 i 結尾的最佳值」,只依賴 i-1,所以用變數滾動就好<br>滑動視窗需要「擴張變好、收縮變差」的單調性;乘積遇到負數會翻號,沒有單調性	neetcode::dp-1d
-nc-missing-number-xor	長度 n 的陣列裝著 0..n 中的 n 個不同數字,缺一個。如何 O(n) 時間、O(1) 空間找出來?原理?	把 0..n 全部 XOR,再 XOR 陣列裡每個元素,剩下的就是缺的數<br>x ^ x = 0、x ^ 0 = x,成對出現的數會全部抵銷	neetcode::bit
-nc-word-break-dp	判斷字串能否切成字典裡的單字(單字可重複使用)。dp 定義與轉移?	dp[i] = s 的前 i 個字元能否被切分,dp[0] = true<br>dp[i] = true 若存在某個 word,使 s 的 [i - len, i) 等於 word 且 dp[i - len] 為 true<br>答案 dp[n]	neetcode::dp-1d
-nc-word-break-greedy-wrong	Word Break 為什麼不能從左到右「一配到單字就切」?給一個反例。	貪心會選太早的切點,之後沒辦法回頭<br>反例:s = aaaaaaa(7 個 a),字典 [aaaa, aaa]。貪心切成 aaa、aaa,剩下 a 失敗;正解是 aaa + aaaa<br>要用 DP 考慮所有可能的切點	neetcode::dp-1d
-nc-house-robber-ii-circle	房子排成一圈(首尾相鄰),不能偷相鄰兩間,求最大金額。怎麼化成原本的 House Robber?	首尾不能同時偷,所以拆成兩種情況:不偷最後一間(範圍 0..n-2)、不偷第一間(範圍 1..n-1)<br>各跑一次線性版取 max;n == 1 要特判	neetcode::dp-1d
-nc-subsets-ii-dedup	陣列含重複元素,求所有不重複的子集。回溯時怎麼去重?條件為什麼是 i &gt; start?	先排序讓相同的數相鄰,迴圈中 <code>if (i &gt; start &amp;&amp; nums[i] == nums[i-1]) continue;</code><br>同一層不選重複的值;i == start 是這一層的第一個選擇,允許選<br>效果:同層去重、不同層可以重複	neetcode::backtracking
-cpp-substr-compare	C++ 檢查 s 的某一段是否等於 word,為什麼 <code>s.substr(pos, len) == word</code> 不理想?改用什麼?	substr 每次都會配置一個新字串<br>改用 <code>s.compare(pos, len, word) == 0</code>,不會配置記憶體	cpp
+pattern-dp-2d-recipe	「兩個字串/序列 + 前綴」型 2D DP 的三個步驟?	A. 狀態:dp[i][j] = A 前 i 個、B 前 j 個時的答案(寫成一句完整的話)<br>B. 轉移:只看最後一個元素 A[i-1]、B[j-1],列出所有選擇,各退回哪一格<br>C. 邊界:開 (n+1)×(m+1),第 0 列/行 = 空前綴;dp 索引是長度、字串索引是位置,所以用 A[i-1]	pattern neetcode::dp-2d date::2026-10-09 src::longest-common-subsequence
+habit-before-submit	按 Submit 之前要做哪三件事?	1. 手動跑一個小例子<br>2. 跑一個邊界例子(空、單一元素、全部相同)<br>3. 刪掉 debug 輸出(printf)	habit date::2026-10-09
+nc-longest-common-subsequence-recognize	兩個字串,求「兩邊都有、順序一致、不必連續」的最長子序列長度。方法與 dp[i][j] 定義?	2D DP。dp[i][j] = text1 前 i 個字元與 text2 前 j 個字元的 LCS 長度。答案 dp[n][m],時間 O(nm)	neetcode::dp-2d date::2026-10-09 src::longest-common-subsequence
+nc-longest-common-subsequence-transition	LCS 的轉移式?最後字元不相等時,為什麼是 max(dp[i-1][j], dp[i][j-1])?	相等:dp[i-1][j-1] + 1;不等:max(dp[i-1][j], dp[i][j-1])<br>不等時 a、b 至少一個沒被用到:若 a 被用到,它是子序列最後一個字元,配到 B 中 b 之前的位置,b 就用不到<br>不知道是哪一個沒用到,所以兩個都試,取 max	neetcode::dp-2d date::2026-10-09 src::longest-common-subsequence
+nc-edit-distance-transition	Edit Distance(插入/刪除/替換,求最少操作):dp 定義、邊界、轉移?	dp[i][j] = word1 前 i 個轉成 word2 前 j 個的最少操作<br>邊界:dp[i][0] = i(全刪)、dp[0][j] = j(全插)<br>相等:dp[i-1][j-1];不等:1 + min(dp[i-1][j-1] 替換, dp[i-1][j] 刪除, dp[i][j-1] 插入)	neetcode::dp-2d date::2026-10-07 src::edit-distance
+nc-longest-increasing-subsequence-dp	LIS(最長嚴格遞增子序列)的 O(n²) DP:dp[i] 的定義、轉移、答案在哪?	dp[i] = 以 nums[i] 結尾的 LIS 長度,初始為 1<br>dp[i] = max(dp[j] + 1),其中 j &lt; i 且 nums[j] &lt; nums[i]<br>答案是所有 dp[i] 的最大值,不是 dp[n-1]	neetcode::dp-1d date::2026-10-09 src::longest-increasing-subsequence
+nc-counting-bits-transition	求 0..n 每個數的二進位 1 個數,如何 O(n)?	dp[i] = dp[i &gt;&gt; 1] + (i &amp; 1)<br>i &gt;&gt; 1 是 i 去掉最低位,一定比 i 小、已經算過;再加回最低位是不是 1	neetcode::bit neetcode::dp-1d date::2026-10-08 src::counting-bits
+nc-lca-bst-iterative	在 BST 中找 p、q 的最低共同祖先,如何做到 O(h) 時間、O(1) 空間?	從 root 往下走:p、q 都比 cur 小就往左;都比 cur 大就往右;否則 cur 就是答案(兩者分岔,或 cur 等於其中一個)<br>靠 BST 的有序性,不需要遞迴或額外空間	neetcode::tree date::2026-10-08 src::lowest-common-ancestor-in-binary-search-tree
+nc-anagram-groups-key	把互為字母重排(anagram)的字串分組:hash map 的 key 用什麼?兩種做法的複雜度?	1. 排序後的字串:O(n·k log k)<br>2. 26 個字母的計數串成字串,例如 1#0#2#...:O(n·k)<br>分隔符 # 不能省,否則計數 [1, 11] 和 [11, 1] 都會變成 111	neetcode::hashing date::2026-10-09 src::anagram-groups
+cpp-range-for-copy	C++:<code>for (const string s : strs)</code> 有什麼問題?	每一圈都複製一份字串。改成 <code>const string&amp; s</code>,唯讀時用 const 參考	cpp date::2026-10-09 src::anagram-groups pitfall
+nc-pacific-atlantic-water-flow-recognize	高度格子,水只能流向不高於自己的鄰格。求能同時流到「上/左邊界」和「下/右邊界」的格子。從每格出發模擬太慢,怎麼做?	反向思考:從兩組邊界各自出發,往高度 ≥ 目前格的鄰格 DFS/BFS,得到兩個可達集合,取交集<br>每格對每個海洋最多走一次,O(mn)	neetcode::graph date::2026-10-09 src::pacific-atlantic-water-flow
+nc-binary-tree-right-side-view-bfs	從右邊看一棵二元樹,輸出每一層看得到的節點。用 BFS 怎麼取?	層序 BFS:每層開始時記下 size = q.size(),該層最後一個節點就是答案<br>可以在處理前取 q.back(),或在迴圈中 i == size - 1 時取	neetcode::tree date::2026-10-10 src::binary-tree-right-side-view
+nc-islands-and-treasure-multisource-bfs	格子裡有多個寶藏(0)、牆(-1)、空地(INF),要把每塊空地填成「到最近寶藏的距離」。用什麼方法?	多源 BFS:所有寶藏一起放進佇列,一圈一圈往外擴散<br>第一次走到某格時的距離就是最短距離,之後不再更新;每格只處理一次,O(mn)	neetcode::graph date::2026-10-10 src::islands-and-treasure
+nc-islands-and-treasure-dfs-tle	「到最近寶藏的距離」這題,為什麼從每個寶藏各自 DFS 會超時?	每個寶藏都會把同一塊空地重新走一次、覆蓋更短的距離,最差 O(k·mn)(k 是寶藏數)<br>無權重格子的最短距離用 BFS,多個起點就全部一起入佇列。你的 DFS 版本就是因此 TLE	neetcode::graph date::2026-10-10 src::islands-and-treasure pitfall
+nc-climbing-stairs-recurrence	每次爬 1 或 2 階,爬到第 n 階有幾種方法?遞迴式和初始值?	dp[i] = dp[i-1] + dp[i-2](最後一步是 1 階或 2 階)<br>dp[0] = dp[1] = 1,本質就是 Fibonacci	neetcode::dp-1d date::2026-10-10 src::climbing-stairs
+nc-rotate-matrix-steps	n×n 矩陣原地順時針旋轉 90°,哪兩個步驟?	1. 轉置:沿主對角線交換 matrix[r][c] 和 matrix[c][r]<br>2. 每一列左右反轉	neetcode::math date::2026-10-10 src::rotate-matrix
+nc-rotate-matrix-transpose-range	原地轉置矩陣時,內層迴圈 c 要從哪裡開始?為什麼?	c 從 r + 1 開始,只處理上三角<br>若從 0 開始,每一對 (r, c) 會被交換兩次,等於沒換	neetcode::math date::2026-10-10 src::rotate-matrix
+nc-valid-binary-search-tree-bounds	驗證 BST 時,只比較每個節點和它的左右子節點為什麼不夠?正確做法?	BST 要求整棵左子樹都小於節點,不只直接子節點。反例:5 的右子是 6,6 的左子是 4,局部都對,但 4 &lt; 5 卻在右子樹<br>往下傳 (下界, 上界):往左走上界改成 node-&gt;val,往右走下界改成 node-&gt;val,每個節點必須嚴格落在區間內	neetcode::tree date::2026-10-11 src::valid-binary-search-tree
+nc-valid-binary-search-tree-int-bounds	驗證 BST 時用 INT_MIN / INT_MAX 當初始上下界,會有什麼 bug?怎麼修?	節點值本身可能就是 INT_MIN 或 INT_MAX,嚴格比較會誤判,例如只有一個值為 INT_MAX 的節點會被判成不合法<br>改用 long long(LLONG_MIN / LLONG_MAX),或傳 TreeNode* 當邊界、nullptr 代表沒有限制	neetcode::tree date::2026-10-11 src::valid-binary-search-tree pitfall
+nc-max-water-container-two-pointers	一排柱子高度,任選兩根和 x 軸圍成容器,求最大水量。O(n) 怎麼做?每次移動哪一邊、為什麼?	左右指針從兩端開始,面積 = min(h[l], h[r]) × (r - l)<br>移動較矮的一邊:高度由矮邊決定,寬度只會越來越小,留著矮邊不可能得到更大的面積	neetcode::two-pointers date::2026-10-11 src::max-water-container
+nc-maximum-product-subarray-minmax	求乘積最大的連續子陣列。為什麼要同時維護「以當前元素結尾的最大乘積和最小乘積」?	負數會讓最小(最負)的乘積翻成最大<br>每一步的候選是 num、maxP × num、minP × num,新的 maxP、minP 從這三個取;候選含 num 本身,遇到 0 會自動重新開始<br>答案是過程中 maxP 的最大值	neetcode::dp-1d date::2026-10-11 src::maximum-product-subarray
+nc-maximum-product-subarray-is-dp	「連續子陣列的最大和/最大乘積」這類題是 DP 嗎?為什麼不用滑動視窗?	是 1D DP(Kadane):狀態是「以 i 結尾的最佳值」,只依賴 i-1,所以用變數滾動就好<br>滑動視窗需要「擴張變好、收縮變差」的單調性;乘積遇到負數會翻號,沒有單調性	neetcode::dp-1d date::2026-10-11 src::maximum-product-subarray pitfall
+nc-missing-number-xor	長度 n 的陣列裝著 0..n 中的 n 個不同數字,缺一個。如何 O(n) 時間、O(1) 空間找出來?原理?	把 0..n 全部 XOR,再 XOR 陣列裡每個元素,剩下的就是缺的數<br>x ^ x = 0、x ^ 0 = x,成對出現的數會全部抵銷	neetcode::bit date::2026-10-12 src::missing-number
+nc-word-break-dp	判斷字串能否切成字典裡的單字(單字可重複使用)。dp 定義與轉移?	dp[i] = s 的前 i 個字元能否被切分,dp[0] = true<br>dp[i] = true 若存在某個 word,使 s 的 [i - len, i) 等於 word 且 dp[i - len] 為 true<br>答案 dp[n]	neetcode::dp-1d date::2026-10-12 src::word-break
+nc-word-break-greedy-wrong	Word Break 為什麼不能從左到右「一配到單字就切」?給一個反例。	貪心會選太早的切點,之後沒辦法回頭<br>反例:s = aaaaaaa(7 個 a),字典 [aaaa, aaa]。貪心切成 aaa、aaa,剩下 a 失敗;正解是 aaa + aaaa<br>要用 DP 考慮所有可能的切點	neetcode::dp-1d date::2026-10-12 src::word-break pitfall
+nc-house-robber-ii-circle	房子排成一圈(首尾相鄰),不能偷相鄰兩間,求最大金額。怎麼化成原本的 House Robber?	首尾不能同時偷,所以拆成兩種情況:不偷最後一間(範圍 0..n-2)、不偷第一間(範圍 1..n-1)<br>各跑一次線性版取 max;n == 1 要特判	neetcode::dp-1d date::2026-10-13 src::house-robber-ii
+nc-subsets-ii-dedup	陣列含重複元素,求所有不重複的子集。回溯時怎麼去重?條件為什麼是 i &gt; start?	先排序讓相同的數相鄰,迴圈中 <code>if (i &gt; start &amp;&amp; nums[i] == nums[i-1]) continue;</code><br>同一層不選重複的值;i == start 是這一層的第一個選擇,允許選<br>效果:同層去重、不同層可以重複	neetcode::backtracking date::2026-10-13 src::subsets-ii
+cpp-substr-compare	C++ 檢查 s 的某一段是否等於 word,為什麼 <code>s.substr(pos, len) == word</code> 不理想?改用什麼?	substr 每次都會配置一個新字串<br>改用 <code>s.compare(pos, len, word) == 0</code>,不會配置記憶體	cpp date::2026-10-12 src::word-break pitfall
