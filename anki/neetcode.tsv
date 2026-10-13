@@ -22,3 +22,12 @@ nc-rotate-matrix-steps	n×n 矩陣原地順時針旋轉 90°,哪兩個步驟?	1.
 nc-rotate-matrix-transpose-range	原地轉置矩陣時,內層迴圈 c 要從哪裡開始?為什麼?	c 從 r + 1 開始,只處理上三角<br>若從 0 開始,每一對 (r, c) 會被交換兩次,等於沒換	neetcode::math
 nc-valid-binary-search-tree-bounds	驗證 BST 時,只比較每個節點和它的左右子節點為什麼不夠?正確做法?	BST 要求整棵左子樹都小於節點,不只直接子節點。反例:5 的右子是 6,6 的左子是 4,局部都對,但 4 &lt; 5 卻在右子樹<br>往下傳 (下界, 上界):往左走上界改成 node-&gt;val,往右走下界改成 node-&gt;val,每個節點必須嚴格落在區間內	neetcode::tree
 nc-valid-binary-search-tree-int-bounds	驗證 BST 時用 INT_MIN / INT_MAX 當初始上下界,會有什麼 bug?怎麼修?	節點值本身可能就是 INT_MIN 或 INT_MAX,嚴格比較會誤判,例如只有一個值為 INT_MAX 的節點會被判成不合法<br>改用 long long(LLONG_MIN / LLONG_MAX),或傳 TreeNode* 當邊界、nullptr 代表沒有限制	neetcode::tree
+nc-max-water-container-two-pointers	一排柱子高度,任選兩根和 x 軸圍成容器,求最大水量。O(n) 怎麼做?每次移動哪一邊、為什麼?	左右指針從兩端開始,面積 = min(h[l], h[r]) × (r - l)<br>移動較矮的一邊:高度由矮邊決定,寬度只會越來越小,留著矮邊不可能得到更大的面積	neetcode::two-pointers
+nc-maximum-product-subarray-minmax	求乘積最大的連續子陣列。為什麼要同時維護「以當前元素結尾的最大乘積和最小乘積」?	負數會讓最小(最負)的乘積翻成最大<br>每一步的候選是 num、maxP × num、minP × num,新的 maxP、minP 從這三個取;候選含 num 本身,遇到 0 會自動重新開始<br>答案是過程中 maxP 的最大值	neetcode::dp-1d
+nc-maximum-product-subarray-is-dp	「連續子陣列的最大和/最大乘積」這類題是 DP 嗎?為什麼不用滑動視窗?	是 1D DP(Kadane):狀態是「以 i 結尾的最佳值」,只依賴 i-1,所以用變數滾動就好<br>滑動視窗需要「擴張變好、收縮變差」的單調性;乘積遇到負數會翻號,沒有單調性	neetcode::dp-1d
+nc-missing-number-xor	長度 n 的陣列裝著 0..n 中的 n 個不同數字,缺一個。如何 O(n) 時間、O(1) 空間找出來?原理?	把 0..n 全部 XOR,再 XOR 陣列裡每個元素,剩下的就是缺的數<br>x ^ x = 0、x ^ 0 = x,成對出現的數會全部抵銷	neetcode::bit
+nc-word-break-dp	判斷字串能否切成字典裡的單字(單字可重複使用)。dp 定義與轉移?	dp[i] = s 的前 i 個字元能否被切分,dp[0] = true<br>dp[i] = true 若存在某個 word,使 s 的 [i - len, i) 等於 word 且 dp[i - len] 為 true<br>答案 dp[n]	neetcode::dp-1d
+nc-word-break-greedy-wrong	Word Break 為什麼不能從左到右「一配到單字就切」?給一個反例。	貪心會選太早的切點,之後沒辦法回頭<br>反例:s = aaaaaaa(7 個 a),字典 [aaaa, aaa]。貪心切成 aaa、aaa,剩下 a 失敗;正解是 aaa + aaaa<br>要用 DP 考慮所有可能的切點	neetcode::dp-1d
+nc-house-robber-ii-circle	房子排成一圈(首尾相鄰),不能偷相鄰兩間,求最大金額。怎麼化成原本的 House Robber?	首尾不能同時偷,所以拆成兩種情況:不偷最後一間(範圍 0..n-2)、不偷第一間(範圍 1..n-1)<br>各跑一次線性版取 max;n == 1 要特判	neetcode::dp-1d
+nc-subsets-ii-dedup	陣列含重複元素,求所有不重複的子集。回溯時怎麼去重?條件為什麼是 i &gt; start?	先排序讓相同的數相鄰,迴圈中 <code>if (i &gt; start &amp;&amp; nums[i] == nums[i-1]) continue;</code><br>同一層不選重複的值;i == start 是這一層的第一個選擇,允許選<br>效果:同層去重、不同層可以重複	neetcode::backtracking
+cpp-substr-compare	C++ 檢查 s 的某一段是否等於 word,為什麼 <code>s.substr(pos, len) == word</code> 不理想?改用什麼?	substr 每次都會配置一個新字串<br>改用 <code>s.compare(pos, len, word) == 0</code>,不會配置記憶體	cpp
