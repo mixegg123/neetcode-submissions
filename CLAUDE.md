@@ -23,7 +23,9 @@
 2. 每題讀最新一份 submission,檢查正確性、複雜度、C++ 細節。
 3. 依下方規則產生 Anki 卡片,**追加**到 `anki/neetcode.tsv`。已有的 GUID 不要改。
 4. 回報:新增題目表格(題目、類型、提交數、評價)、累計題數、對照計畫的進度、要改的習慣。
-5. 把 `anki/last_processed` 更新成 `origin/main` 的最新 commit,commit 並推送。
+5. 把 `anki/last_processed` 更新成 `origin/main` 的最新 commit,commit 並推送,開 PR 後問使用者要不要合併。
+6. 在 repo 根目錄執行 `python3 -I anki/build_page.py <scratchpad>/neetcode-review.html`,再用 Artifact 工具以
+   `url: https://claude.ai/artifact/4VFTvEmFEwVTsvdLowdxKE` 重新發布,把連結給使用者。使用者是從這個網頁看卡片的。
 
 ## Anki 卡片規則
 
@@ -43,3 +45,5 @@
 - 欄位內不能有 Tab 或換行,換行用 `<br>`。
 - HTML 已開啟,文字裡的 `<`、`>`、`&` 一律寫成 `&lt;`、`&gt;`、`&amp;`。程式碼用 `<code>`。
 - Tags 用空白分隔,類型用 `neetcode::<類型>`,例如 `neetcode::dp-2d`、`neetcode::tree`。
+- 每張卡都要有 `date::YYYY-MM-DD`:該題最新一次提交的日期(`git log -1 --format=%ad --date=short -- <資料夾>`)。
+- 有來源題目的卡加 `src::<題目資料夾名>`,網頁靠它產生題目和解答連結。易錯點卡加 `pitfall`。
