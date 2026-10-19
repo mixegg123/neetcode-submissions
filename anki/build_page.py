@@ -19,7 +19,8 @@ REPO = "https://github.com/mixegg123/neetcode-submissions/blob/main/"
 TOPIC_NAMES = {
     "dp-1d": "1D DP", "dp-2d": "2D DP", "graph": "Graph", "tree": "Tree",
     "bit": "Bit", "hashing": "Hashing", "math": "Math", "two-pointers": "Two Pointers",
-    "backtracking": "Backtracking",
+    "backtracking": "Backtracking", "linked-list": "Linked List",
+    "binary-search": "Binary Search", "heap": "Heap",
 }
 
 
