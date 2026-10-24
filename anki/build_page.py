@@ -21,6 +21,7 @@ TOPIC_NAMES = {
     "bit": "Bit", "hashing": "Hashing", "math": "Math", "two-pointers": "Two Pointers",
     "backtracking": "Backtracking", "linked-list": "Linked List",
     "binary-search": "Binary Search", "heap": "Heap", "greedy": "Greedy",
+    "stack": "Stack",
 }
 
 
