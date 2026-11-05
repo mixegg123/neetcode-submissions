@@ -20,6 +20,8 @@
 使用者說「整理」時,依序做:
 
 1. `git fetch origin main`,讀 `anki/last_processed` 裡的 commit,列出它之後的新提交。
+   NeetCode 有時會重建 repo 的歷史(2026-10-30 發生過),這時那個 commit 已不在 `origin/main` 裡
+   (`git merge-base --is-ancestor` 失敗):改用 `anki/neetcode.tsv` 裡最新的 `date::` 當起點,用 `git log --since` 列出新提交。
 2. 每題讀最新一份 submission,檢查正確性、複雜度、C++ 細節。
 3. 依下方規則產生 Anki 卡片,**追加**到 `anki/neetcode.tsv`。已有的 GUID 不要改。
 4. 回報:新增題目表格(題目、類型、提交數、評價)、累計題數、對照計畫的進度、要改的習慣。
