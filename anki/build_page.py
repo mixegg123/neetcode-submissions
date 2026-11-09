@@ -22,7 +22,7 @@ TOPIC_NAMES = {
     "backtracking": "Backtracking", "linked-list": "Linked List",
     "binary-search": "Binary Search", "heap": "Heap", "greedy": "Greedy",
     "stack": "Stack", "sliding-window": "Sliding Window", "trie": "Trie",
-    "string": "String",
+    "string": "String", "intervals": "Intervals",
 }
 
 
