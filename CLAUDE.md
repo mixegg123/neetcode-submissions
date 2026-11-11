@@ -82,6 +82,8 @@ NC150 做完前的每週內容:新題約 3 題、每次刷題前修一項積欠�
 5. 把 `anki/last_processed` 更新成 `origin/main` 的最新 commit,commit 並推送,開 PR 後問使用者要不要合併。
 6. 在 repo 根目錄執行 `python3 -I anki/build_page.py <scratchpad>/neetcode-review.html`,再用 Artifact 工具以
    `url: https://claude.ai/artifact/4VFTvEmFEwVTsvdLowdxKE` 重新發布,把連結給使用者。使用者是從這個網頁看卡片的。
+   使用者指定日期範圍時,在連結後面加 `#YYYY-MM-DD_YYYY-MM-DD`(起、迄),網頁會直接開那個範圍。
+   repo 是 2026-10-02 才開始同步的,更早的提交沒有日期。
 
 ## Anki 卡片規則
 
