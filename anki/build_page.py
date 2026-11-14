@@ -20,7 +20,9 @@ TOPIC_NAMES = {
     "dp-1d": "1D DP", "dp-2d": "2D DP", "graph": "Graph", "tree": "Tree",
     "bit": "Bit", "hashing": "Hashing", "math": "Math", "two-pointers": "Two Pointers",
     "backtracking": "Backtracking", "linked-list": "Linked List",
-    "binary-search": "Binary Search", "heap": "Heap",
+    "binary-search": "Binary Search", "heap": "Heap", "greedy": "Greedy",
+    "stack": "Stack", "sliding-window": "Sliding Window", "trie": "Trie",
+    "string": "String", "intervals": "Intervals",
 }
 
 
@@ -103,9 +105,10 @@ header p { margin: .25rem 0 0; color: var(--muted); font-size: .85rem; }
 .chip { font: inherit; font-size: .85rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
   border-radius: 999px; padding: 4px 12px; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
-.chip:focus-visible, button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chip:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .chip .n { font-family: var(--mono); opacity: .75; margin-left: 4px; }
-select { font: inherit; font-size: .85rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+.range { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); }
+select, input[type="date"] { font: inherit; font-size: .85rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
   border-radius: 999px; padding: 4px 10px; }
 .sep { width: 1px; height: 20px; background: var(--line); }
 section { display: grid; gap: 14px; margin-top: 28px; }
@@ -149,6 +152,7 @@ code { font-family: var(--mono); font-size: .88em; background: var(--accent-soft
     <button class="chip" id="r3" data-range="3">最近 3 天<span class="n"></span></button>
     <button class="chip" id="r7" data-range="7">最近 7 天<span class="n"></span></button>
     <button class="chip" id="rall" data-range="all">全部<span class="n"></span></button>
+    <span class="range"><input type="date" id="from" aria-label="起始日期"><span aria-hidden="true">–</span><input type="date" id="to" aria-label="結束日期"></span>
     <span class="sep" aria-hidden="true"></span>
     <button class="chip" id="pit" aria-pressed="false">只看易錯</button>
     <button class="chip" id="miss" aria-pressed="false">只看「還不會」</button>
@@ -170,14 +174,20 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
 };
-let state = Object.assign({ range: "3", pit: false, miss: false, topic: "", openAll: false }, store.get("nc-filter", {}));
+let state = Object.assign({ range: "3", from: "", to: "", pit: false, miss: false, topic: "", openAll: false }, store.get("nc-filter", {}));
+// A link ending in #2026-11-01_2026-11-11 opens that date range.
+const hashRange = /^#(\d{4}-\d{2}-\d{2})_(\d{4}-\d{2}-\d{2})$/.exec(location.hash);
+if (hashRange) Object.assign(state, { range: "custom", from: hashRange[1], to: hashRange[2], pit: false, miss: false, topic: "" });
 let ratings = store.get("nc-ratings", {});
 const opened = new Set();
 
 function today() { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
 function parse(s) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); }
 function ageDays(s) { return Math.round((today() - parse(s)) / 86400000); }
-function inRange(c, r) { return r === "all" || ageDays(c.date) < Number(r); }
+function inRange(c, r) {
+  if (r === "custom") return (!state.from || c.date >= state.from) && (!state.to || c.date <= state.to);
+  return r === "all" || ageDays(c.date) < Number(r);
+}
 function label(s) { const d = parse(s); return `${d.getMonth() + 1}/${d.getDate()}(${WD[d.getDay()]})`; }
 
 function matches(c, r) {
@@ -261,6 +271,8 @@ function render() {
   document.getElementById("miss").setAttribute("aria-pressed", String(state.miss));
   document.getElementById("openall").setAttribute("aria-pressed", String(state.openAll));
   document.getElementById("topic").value = state.topic;
+  document.getElementById("from").value = state.range === "custom" ? state.from : "";
+  document.getElementById("to").value = state.range === "custom" ? state.to : "";
   updateCounts();
   const list = document.getElementById("list");
   list.replaceChildren();
@@ -283,12 +295,17 @@ const topics = [...new Set(CARDS.flatMap(c => c.topics))].sort();
 const sel = document.getElementById("topic");
 topics.forEach(t => { const o = text("option", null, t); o.value = t; sel.append(o); });
 if (state.topic && !topics.includes(state.topic)) state.topic = "";
-document.querySelectorAll("[data-range]").forEach(b => b.onclick = () => { state.range = b.dataset.range; render(); });
+document.querySelectorAll("[data-range]").forEach(b => b.onclick = () => { state.range = b.dataset.range; state.from = state.to = ""; render(); });
+["from", "to"].forEach(id => document.getElementById(id).onchange = e => {
+  state[id] = e.target.value;
+  state.range = (state.from || state.to) ? "custom" : "all";
+  render();
+});
 document.getElementById("pit").onclick = () => { state.pit = !state.pit; render(); };
 document.getElementById("miss").onclick = () => { state.miss = !state.miss; render(); };
 document.getElementById("openall").onclick = () => { state.openAll = !state.openAll; opened.clear(); render(); };
 sel.onchange = () => { state.topic = sel.value; render(); };
-document.getElementById("showall").onclick = () => { state = Object.assign(state, { range: "all", pit: false, miss: false, topic: "" }); render(); };
+document.getElementById("showall").onclick = () => { state = Object.assign(state, { range: "all", from: "", to: "", pit: false, miss: false, topic: "" }); render(); };
 render();
 </script>
 """
