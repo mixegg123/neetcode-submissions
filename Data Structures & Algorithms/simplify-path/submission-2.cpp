@@ -1,0 +1,41 @@
+class Solution {
+public:
+    string simplifyPath(string path) {
+        vector<string> words;
+        string ans="/";
+        int l = 0;
+
+        while(l<path.size())
+        {
+            while(l<path.size() &&path[l] == '/')
+                l++;
+            
+            if(l == path.size())
+                break;
+            int pos = path.find("/", l);
+            if(pos == std::string::npos)
+            {
+                pos = path.size();
+            }
+            
+            string s = path.substr(l,pos-l);
+            if(s == "..")
+            {
+                if(!words.empty())
+                    words.pop_back();
+            } else if (s != "."){
+                words.push_back(s);
+            }
+            //update l to pos position
+            l = pos;
+        }
+
+        for( int i = 0; i<words.size();i++)
+        {
+            ans = ans + words[i] + 
+                ((i!=words.size()-1) ?"/":"");
+        }
+
+        return ans;
+    }
+};
